@@ -1,6 +1,6 @@
 package com.snowballer.api.domain;
 
-import com.snowballer.api.domain.common.BaseTimeEntity;
+import com.snowballer.api.common.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 
