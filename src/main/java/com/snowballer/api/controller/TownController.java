@@ -4,7 +4,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.snowballer.api.dto.request.SubmitAnswerRequest;
+import com.snowballer.api.dto.request.SubmitLetterRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -50,7 +54,7 @@ public class TownController {
 	 * @return 답변에 의해 만들어진 눈사람 정보
 	 */
 	@PostMapping("/{townUrl}/question")
-	public ResponseEntity<String> submitAnswer(@PathVariable String townUrl) {
+	public ResponseEntity<String> submitAnswer(@PathVariable String townUrl, @RequestBody SubmitAnswerRequest request) {
 		return ResponseEntity.ok("made-snowman");
 	}
 
@@ -60,7 +64,7 @@ public class TownController {
 	 * @return success
 	 */
 	@PostMapping("/{townUrl}/letter")
-	public ResponseEntity<String> submitLetter(@PathVariable String townUrl) {
+	public ResponseEntity<String> submitLetter(@PathVariable String townUrl, @RequestBody SubmitLetterRequest request) {
 		return ResponseEntity.ok("letter success");
 	}
 }
