@@ -2,10 +2,7 @@ package com.snowballer.api.domain;
 
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Getter
 public class Answer {
@@ -16,5 +13,6 @@ public class Answer {
     private String content;
 
     @ManyToOne
+    @JoinColumn(name = "question_id")
     private Question question;
 }

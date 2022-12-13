@@ -1,21 +1,19 @@
 package com.snowballer.api.domain;
 
+import com.snowballer.api.domain.common.BaseTimeEntity;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-public class User {
+@Getter @Builder
+public class User extends BaseTimeEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nickname;
-
-    @Column(name = "create_at", nullable = false)
-    private LocalDateTime createAt;
 
     @Column(name = "social_login_id")
     private String socialLoginId;

@@ -1,27 +1,25 @@
 package com.snowballer.api.domain;
 
+import com.snowballer.api.domain.common.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 
 @Getter @Builder
-public class Town {
+public class Town extends BaseTimeEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String url;
 
     private String name;
 
-    @Column(name="create_at")
-    private LocalDateTime createAt;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "town")
