@@ -20,6 +20,11 @@ public class TownSnowman extends BaseTimeEntity {
     @Column(nullable = false)
     private Boolean seen;
 
+    @Column(name = "have_letter")
+    private Boolean haveLetter;
+
+    private String url;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "snowman_id")
     private Snowman snowman;
