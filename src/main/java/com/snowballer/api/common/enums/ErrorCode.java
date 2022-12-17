@@ -6,7 +6,7 @@ public enum ErrorCode {
 	DEFAULT_ERROR_CODE(5000, HttpStatus.INTERNAL_SERVER_ERROR, "기본 에러 메시지입니다."),
 	UNAUTHORIZED_REQUEST(4000, HttpStatus.UNAUTHORIZED, "허용되지 않는 권한입니다.");
 
-	private int code;
+	private final int code;
 	private HttpStatus httpStatus;
 	private String message;
 

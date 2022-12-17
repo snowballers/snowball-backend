@@ -1,5 +1,8 @@
 package com.snowballer.api.common.dto;
 
+import lombok.Getter;
+
+@Getter
 public class DataResponse<T> extends BaseResponse {
 	private T data;
 
