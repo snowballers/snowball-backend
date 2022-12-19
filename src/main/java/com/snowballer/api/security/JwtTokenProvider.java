@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
-	private String secretKey = "snowballer-snowman";
+	static private String secretKey = "snowballer-snowman";
 
 	private long tokenValidTime = 24 * 60 * 60 * 1000L;
 	private final String AUTHORITIES_KEY = "role";
@@ -85,17 +85,6 @@ public class JwtTokenProvider {
 
 	public String resolveHeaderToken(HttpServletRequest request) {
 		return request.getHeader("Authorization");
-	}
-
-	public String resolveCookieToken(HttpServletRequest request, String key) {
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals(key))
-					return cookie.getValue();
-			}
-		}
-		return null;
 	}
 
 	// 토큰의 유효성 + 만료일자 확인

@@ -29,15 +29,15 @@ public class CustomUserService extends DefaultOAuth2UserService {
 		String registrationId = userRequest.getClientRegistration().getRegistrationId();
 		String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
 			.getUserInfoEndpoint().getUserNameAttributeName();
-		Long socialLoginId = null;
+		String socialLoginId = null;
 		String name = null;
 		if (provider.equals("google")) {
 			// TODO 구글 attribute 확인 !
-			socialLoginId = (Long)userAttributes.get("id");
+			socialLoginId = (String)userAttributes.get("id");
 			name = (String)userAttributes.get("login");
 		} else if (provider.equals("kakao")) {
 			Map<String, Object> kakaoAttributes = (Map<String, Object>)userAttributes.get("kakao_account");
-			socialLoginId = (Long)kakaoAttributes.get("id");
+			socialLoginId = (String)kakaoAttributes.get("id");
 			Map<String, Object> temp = null;
 			temp = (Map)kakaoAttributes.get("properties");
 			name = (String)temp.get("nickname");
