@@ -1,12 +1,17 @@
 package com.snowballer.api.domain;
 
-import com.snowballer.api.common.domain.BaseTimeEntity;
+import com.snowballer.api.domain.common.BaseTimeEntity;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Entity
 @Getter @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TownSnowman extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +24,9 @@ public class TownSnowman extends BaseTimeEntity {
 
     @Column(nullable = false)
     private Boolean seen;
+
+    @Column(name = "have_letter")
+    private Boolean haveLetter;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "snowman_id")

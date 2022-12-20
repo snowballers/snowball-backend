@@ -1,11 +1,14 @@
 package com.snowballer.api.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+@Entity @Getter
+@NoArgsConstructor
 public class Snowman {
     @Id
     private Long id;
@@ -23,9 +26,6 @@ public class Snowman {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private String state;
-
     @OneToMany(mappedBy = "snowman")
-    private List<TownSnowman> townSnowmanList;
+    private List<TownSnowman> townSnowmanList = new ArrayList<>();
 }
