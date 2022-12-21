@@ -1,10 +1,14 @@
 package com.snowballer.api.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Getter
+@Entity @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Answer {
     @Id
     private Long id;
@@ -15,4 +19,7 @@ public class Answer {
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
+
+    @Enumerated(EnumType.STRING)
+    private AnswerType answerType;
 }

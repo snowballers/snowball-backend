@@ -1,20 +1,23 @@
 package com.snowballer.api.domain;
 
-import com.snowballer.api.common.domain.BaseTimeEntity;
+import com.snowballer.api.common.BaseTimeEntity;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-
+@Entity
 @Getter @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Town extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String url;
 
     private String name;
 
@@ -23,5 +26,5 @@ public class Town extends BaseTimeEntity {
     private User user;
 
     @OneToMany(mappedBy = "town")
-    private List<TownSnowman> townSnowmanList;
+    private List<TownSnowman> townSnowmanList = new ArrayList<>();
 }
