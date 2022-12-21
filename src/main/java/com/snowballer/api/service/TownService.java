@@ -34,9 +34,8 @@ public class TownService {
         // 본인 마을인지 권한 확인
         boolean isMine = false;
 
-        // 눈사람 조회(where haveLetter = True)
-        List<TownSnowman> townSnowmanList = townSnowmanRepository.findAllByTownIdAndHaveLetter(
-            town.getId(), true);
+        // 눈사람 조회
+        List<TownSnowman> townSnowmanList = townSnowmanRepository.findAllByTownId(town.getId());
 
         // dto 생성 및 반환
         return TownResponse.toResponse(town, townSnowmanList, isMine);

@@ -9,14 +9,14 @@ public class SnowmanThumbnailDto {
 
     private Long id;
 
-    private String imageUrl;
+    private String type;
 
     private Boolean seen;
 
     public static SnowmanThumbnailDto toResponse(TownSnowman townSnowman) {
         return SnowmanThumbnailDto.builder()
             .id(townSnowman.getId())
-            .imageUrl(townSnowman.getSnowman().getImageUrl())
+            .type(townSnowman.getSnowman().getType().toString())
             .seen(townSnowman.getSeen())
             .build();
     }
