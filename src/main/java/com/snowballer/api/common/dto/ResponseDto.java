@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
+@AllArgsConstructor
 @Getter
 public class ResponseDto<T> {
 	private final Boolean success;
