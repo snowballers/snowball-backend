@@ -1,6 +1,7 @@
 package com.snowballer.api.dto;
 
 import com.snowballer.api.domain.Snowman;
+import com.snowballer.api.domain.TownSnowman;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,16 +12,16 @@ public class SnowmanResultDto {
 
     private String name;
 
-    private String imageUrl;
+    private String type;
 
     private String description;
 
-    public static SnowmanResultDto toResponse(Snowman snowman) {
+    public static SnowmanResultDto toResponse(TownSnowman townSnowman) {
         return SnowmanResultDto.builder()
-            .id(snowman.getId())
-            .name(snowman.getName())
-            .imageUrl(snowman.getImageUrl())
-            .description(snowman.getDescription())
+            .id(townSnowman.getId())
+            .name(townSnowman.getSnowman().getName())
+            .type(townSnowman.getSnowman().getType().name())
+            .description(townSnowman.getSnowman().getDescription())
             .build();
     }
 }

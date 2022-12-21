@@ -73,14 +73,14 @@ public class TownSnowmanService {
         Snowman snowman = answerService.analysisType(submitAnswerRequest);
 
         // town-snowman에 정보 저장 ( letter = Null, senderName = Null, seen = False, haveLetter = False )
-        TownSnowman townSnowman = TownSnowman.buildSnowman(snowman, town);
+        TownSnowman townSnowman = TownSnowman.buildSnowman(snowman, town, submitAnswerRequest.getSender());
         townSnowmanRepository.save(townSnowman);
 
         // town_snowman에 같은 눈사람이 몇개인지 percent 계산
         Integer percent = calculatePercent(town.getId(), snowman.getId());
 
         // dto 생성 및 반환
-        return ResultResponse.toResponse(town.getUser(), percent, snowman);
+        return ResultResponse.toResponse(town.getUser(), percent, townSnowman);
     }
 
     private Integer calculatePercent(Long townId, Long snowmanId) {

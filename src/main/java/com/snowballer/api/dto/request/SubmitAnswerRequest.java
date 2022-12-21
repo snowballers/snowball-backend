@@ -8,6 +8,10 @@ import lombok.Getter;
 
 @Getter
 public class SubmitAnswerRequest {
-	private int totalQuestion;
-	private List<QuestionDto> questions;
+
+		private String sender;
+
+		private int totalQuestion;
+
+		private List<QuestionDto> questions;
 }

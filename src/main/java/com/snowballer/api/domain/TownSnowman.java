@@ -64,10 +64,10 @@ public class TownSnowman extends BaseTimeEntity {
         this.haveLetter = true;
     }
 
-    public static TownSnowman buildSnowman(Snowman snowman, Town town) {
+    public static TownSnowman buildSnowman(Snowman snowman, Town town, String sender) {
         return TownSnowman.builder()
+            .senderName(sender)
             .seen(false)
-            .haveLetter(false)
             .snowman(snowman)
             .town(town)
             .build();

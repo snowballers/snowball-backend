@@ -1,6 +1,7 @@
 package com.snowballer.api.dto.response;
 
 import com.snowballer.api.domain.Snowman;
+import com.snowballer.api.domain.TownSnowman;
 import com.snowballer.api.domain.User;
 import com.snowballer.api.dto.SnowmanResultDto;
 import lombok.Builder;
@@ -15,11 +16,11 @@ public class ResultResponse {
 
     private SnowmanResultDto snowman;
 
-    public static ResultResponse toResponse(User user, Integer percent, Snowman snowman) {
+    public static ResultResponse toResponse(User user, Integer percent, TownSnowman townSnowman) {
         return ResultResponse.builder()
             .nickname(user.getNickname())
             .percent(percent)
-            .snowman(SnowmanResultDto.toResponse(snowman))
+            .snowman(SnowmanResultDto.toResponse(townSnowman))
             .build();
     }
 }
