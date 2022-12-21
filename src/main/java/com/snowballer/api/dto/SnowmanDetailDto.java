@@ -9,14 +9,14 @@ public class SnowmanDetailDto {
 
     private String name;
 
-    private String imageURL;
+    private String type;
 
     private String description;
 
     public static SnowmanDetailDto toResponse(TownSnowman townSnowman) {
         return SnowmanDetailDto.builder()
             .name(townSnowman.getSnowman().getName())
-            .imageURL(townSnowman.getSnowman().getImageUrl())
+            .type(townSnowman.getSnowman().getType().name())
             .description(townSnowman.getSnowman().getDescription())
             .build();
     }
