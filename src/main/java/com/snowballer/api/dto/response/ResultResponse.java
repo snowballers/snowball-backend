@@ -4,21 +4,22 @@ import com.snowballer.api.domain.Snowman;
 import com.snowballer.api.domain.User;
 import com.snowballer.api.dto.SnowmanResultDto;
 import lombok.Builder;
+import lombok.Getter;
 
-@Builder
+@Builder @Getter
 public class ResultResponse {
 
     private String nickname;
 
     private Integer percent;
 
-    private SnowmanResultDto snowmanResultDto;
+    private SnowmanResultDto snowman;
 
     public static ResultResponse toResponse(User user, Integer percent, Snowman snowman) {
         return ResultResponse.builder()
             .nickname(user.getNickname())
             .percent(percent)
-            .snowmanResultDto(SnowmanResultDto.toResponse(snowman))
+            .snowman(SnowmanResultDto.toResponse(snowman))
             .build();
     }
 }

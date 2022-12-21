@@ -7,7 +7,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
-@Builder
+@Builder @Getter
 public class QuestionAnswerDto {
 
     private Long id;

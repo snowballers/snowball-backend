@@ -2,8 +2,9 @@ package com.snowballer.api.dto;
 
 import com.snowballer.api.domain.TownSnowman;
 import lombok.Builder;
+import lombok.Getter;
 
-@Builder
+@Builder @Getter
 public class SnowmanDetailDto {
 
     private String name;

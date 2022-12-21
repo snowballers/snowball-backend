@@ -8,10 +8,10 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
-@Builder
+@Builder @Getter
 public class TownResponse {
 
-    private Boolean isMind;
+    private Boolean isMine;
 
     private String nickname;
 
@@ -21,7 +21,7 @@ public class TownResponse {
 
     private List<SnowmanThumbnailDto> snowmans;
 
-    public static TownResponse toResponse(Town town, List<TownSnowman> townSnowmanList, Boolean isMind) {
+    public static TownResponse toResponse(Town town, List<TownSnowman> townSnowmanList, Boolean isMine) {
         // TownSnowman
         List<SnowmanThumbnailDto> snowmanThumbnailDtoList = new ArrayList<SnowmanThumbnailDto>();
         for (TownSnowman townSnowman: townSnowmanList) {
@@ -29,7 +29,7 @@ public class TownResponse {
         }
 
         return TownResponse.builder()
-            .isMind(isMind)
+            .isMine(isMine)
             .nickname(town.getUser().getNickname())
             .townName(town.getName())
             .totalSnowman(townSnowmanList.size())

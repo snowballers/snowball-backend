@@ -2,8 +2,9 @@ package com.snowballer.api.dto;
 
 import com.snowballer.api.domain.Snowman;
 import lombok.Builder;
+import lombok.Getter;
 
-@Builder
+@Builder @Getter
 public class SnowmanResultDto {
 
     private Long id;

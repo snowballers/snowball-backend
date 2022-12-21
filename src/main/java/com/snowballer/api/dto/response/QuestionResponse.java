@@ -6,8 +6,9 @@ import com.snowballer.api.dto.QuestionAnswerDto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
+import lombok.Getter;
 
-@Builder
+@Builder @Getter
 public class QuestionResponse {
 
     private String name;
