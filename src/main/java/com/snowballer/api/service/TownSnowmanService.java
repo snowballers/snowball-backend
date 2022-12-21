@@ -1,5 +1,7 @@
 package com.snowballer.api.service;
 
+import com.snowballer.api.common.enums.ErrorCode;
+import com.snowballer.api.common.exception.RestApiException;
 import com.snowballer.api.domain.Snowman;
 import com.snowballer.api.domain.SnowmanType;
 import com.snowballer.api.domain.Town;
@@ -15,23 +17,25 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class TownSnowmanService {
 
     private final UrlService urlService;
-    private final TownRepository townRepository;
+    private final TownService townService;
     private final TownSnowmanRepository townSnowmanRepository;
     private final AnswerService answerService;
 
+    @Transactional
     public TownSnowmanResponse getLetter(Long id) {
 
         // 권한 확인 (본인 마을의 눈사람인지)
 
         // townSnowman에서 조회
         TownSnowman townSnowman = townSnowmanRepository.findById(id)
-            .orElseThrow(()  -> new NoSuchElementException("Snowballers Error: 접근할 수 없는 눈사람입니다."));
+            .orElseThrow(()  -> new RestApiException(ErrorCode.NOT_FOUNT_SNOWMAN));
 
         // "haveLetter == True" 확인
         townSnowman.checkHaveLetter();
@@ -44,11 +48,12 @@ public class TownSnowmanService {
         return TownSnowmanResponse.toResponse(townSnowman);
     }
 
+    @Transactional
     public void setLetter(String url, SubmitLetterRequest submitLetterRequest) {
 
         // townSnowman 조회
         TownSnowman townSnowman = townSnowmanRepository.findById(submitLetterRequest.getSnowmanId())
-            .orElseThrow(() -> new NoSuchElementException("Snowballers Error: 접근할 수 없는 눈사람입니다."));
+            .orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUNT_SNOWMAN));
 
         // url을 townId로 변환
         Long townId = urlService.decoding(url);
@@ -58,12 +63,11 @@ public class TownSnowmanService {
         townSnowmanRepository.save(townSnowman);
     }
 
+    @Transactional
     public ResultResponse makeSnowman(String url, SubmitAnswerRequest submitAnswerRequest) {
 
         // url을 townId로 변환
-        Long townId = urlService.decoding(url);
-        Town town = townRepository.findById(townId)
-            .orElseThrow(()  -> new NoSuchElementException("Snowballers Error: 접근할 수 없는 마을입니다."));
+        Town town = townService.changeUrlToTown(url);
 
         // 응답으로 MBTI 결과 계산
         Snowman snowman = answerService.analysisType(submitAnswerRequest);
@@ -73,7 +77,7 @@ public class TownSnowmanService {
         townSnowmanRepository.save(townSnowman);
 
         // town_snowman에 같은 눈사람이 몇개인지 percent 계산
-        Integer percent = calculatePercent(townId, snowman.getId());
+        Integer percent = calculatePercent(town.getId(), snowman.getId());
 
         // dto 생성 및 반환
         return ResultResponse.toResponse(town.getUser(), percent, snowman);

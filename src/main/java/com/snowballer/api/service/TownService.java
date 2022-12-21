@@ -1,5 +1,7 @@
 package com.snowballer.api.service;
 
+import com.snowballer.api.common.enums.ErrorCode;
+import com.snowballer.api.common.exception.RestApiException;
 import com.snowballer.api.domain.Town;
 import com.snowballer.api.domain.TownSnowman;
 import com.snowballer.api.dto.response.TownResponse;
@@ -22,22 +24,29 @@ public class TownService {
     /**
      * 마을 정보 조회
      * @param url
-     * @return
+     * @return 마을 정보 조회 결과
      */
     public TownResponse getTown(String url) {
 
         // url로 town 조회
-        Long townId = urlService.decoding(url);
-        Town town = townRepository.findById(townId)
-            .orElseThrow(() -> new NoSuchElementException("Snowballers Error: 접근할 수 없는 링크입니다."));
+        Town town = changeUrlToTown(url);
 
         // 본인 마을인지 권한 확인
-        boolean isMind = false;
+        boolean isMine = false;
 
         // 눈사람 조회(where haveLetter = True)
-        List<TownSnowman> townSnowmanList = townSnowmanRepository.findAllByTownIdAndHaveLetter(townId, true);
+        List<TownSnowman> townSnowmanList = townSnowmanRepository.findAllByTownIdAndHaveLetter(
+            town.getId(), true);
 
         // dto 생성 및 반환
-        return TownResponse.toResponse(town, townSnowmanList, isMind);
+        return TownResponse.toResponse(town, townSnowmanList, isMine);
+    }
+
+    public Town changeUrlToTown(String url) {
+        Long townId = urlService.decoding(url);
+        Town town = townRepository.findById(townId)
+            .orElseThrow(() -> new RestApiException(ErrorCode.INVALID_TOWN_LINK));
+
+        return town;
     }
 }
