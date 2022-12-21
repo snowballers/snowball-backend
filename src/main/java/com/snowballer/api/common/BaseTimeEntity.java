@@ -1,4 +1,4 @@
-package com.snowballer.api.domain.common;
+package com.snowballer.api.common;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
