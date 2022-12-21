@@ -7,4 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TownSnowmanRepository extends JpaRepository<TownSnowman, Long> {
 
     List<TownSnowman> findAllByTownIdAndHaveLetter(Long townId, Boolean haveLetter);
+
+    Integer countByTownIdAndHaveLetter(Long townId, Boolean haveLetter);
+
+    Integer countByTownIdAndSnowmanIdAndHaveLetter(Long townId, Long snowmanId, Boolean haveLetter);
 }
