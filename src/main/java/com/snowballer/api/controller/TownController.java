@@ -1,6 +1,7 @@
 package com.snowballer.api.controller;
 
 import com.snowballer.api.common.dto.ResponseDto;
+import com.snowballer.api.dto.request.SubmitTownNameRequest;
 import com.snowballer.api.dto.response.QuestionResponse;
 import com.snowballer.api.dto.response.ResultResponse;
 import com.snowballer.api.dto.response.TownResponse;
@@ -11,6 +12,7 @@ import com.snowballer.api.service.TownSnowmanService;
 import javax.validation.constraints.Null;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -80,4 +82,11 @@ public class TownController {
 		townSnowmanService.setLetter(townUrl, request);
 		return new ResponseDto(null);
 	}
+
+	@PatchMapping("/{townUrl}/town/name")
+	public ResponseDto<Null> modifyTown(@PathVariable String townUrl, @RequestBody SubmitTownNameRequest request) {
+		townService.modifyTownName(townUrl, request);
+		return new ResponseDto(null);
+	}
+
 }

@@ -5,6 +5,7 @@ import com.snowballer.api.common.exception.RestApiException;
 import com.snowballer.api.domain.Town;
 import com.snowballer.api.domain.TownSnowman;
 import com.snowballer.api.domain.User;
+import com.snowballer.api.dto.request.SubmitTownNameRequest;
 import com.snowballer.api.dto.response.TownResponse;
 import com.snowballer.api.repository.TownRepository;
 import com.snowballer.api.repository.TownSnowmanRepository;
@@ -70,5 +71,18 @@ public class TownService {
             .build());
 
         return urlService.encoding(town.getId());
+    }
+
+    @Transactional
+    public void modifyTownName(String url, SubmitTownNameRequest submitTownNameRequest) {
+
+        // 권한 확인
+
+        // url로 town 조회
+        Town town = changeUrlToTown(url);
+
+        // townName 수정
+        town.modifyName(submitTownNameRequest.getTownName());
+        townRepository.save(town);
     }
 }
