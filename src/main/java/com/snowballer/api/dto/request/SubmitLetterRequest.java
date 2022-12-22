@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class SubmitLetterRequest {
-	private Long snowmanId;
-	private String sender;
-	private String letter;
+
+		private Long snowmanId;
+
+		private String letter;
 }
