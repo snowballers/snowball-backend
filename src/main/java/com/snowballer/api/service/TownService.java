@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,13 +59,13 @@ public class TownService {
     /**
      * 마을 생성
      * @param user
-     * @param townName
      * @return 생성된 마을 url
      */
-    public String createTown(User user, String townName) {
+    @Transactional
+    public String createTown(User user) {
 
         Town town = townRepository.save(Town.builder()
-            .name(townName)
+            .name(user.getNickname())
             .user(user)
             .build());
 
