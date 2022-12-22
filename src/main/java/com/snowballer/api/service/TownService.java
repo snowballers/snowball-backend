@@ -4,6 +4,7 @@ import com.snowballer.api.common.enums.ErrorCode;
 import com.snowballer.api.common.exception.RestApiException;
 import com.snowballer.api.domain.Town;
 import com.snowballer.api.domain.TownSnowman;
+import com.snowballer.api.domain.User;
 import com.snowballer.api.dto.response.TownResponse;
 import com.snowballer.api.repository.TownRepository;
 import com.snowballer.api.repository.TownSnowmanRepository;
@@ -52,5 +53,21 @@ public class TownService {
             .orElseThrow(() -> new RestApiException(ErrorCode.INVALID_TOWN_LINK));
 
         return town;
+    }
+
+    /**
+     * 마을 생성
+     * @param user
+     * @param townName
+     * @return 생성된 마을 url
+     */
+    public String createTown(User user, String townName) {
+
+        Town town = townRepository.save(Town.builder()
+            .name(townName)
+            .user(user)
+            .build());
+
+        return urlService.encoding(town.getId());
     }
 }
