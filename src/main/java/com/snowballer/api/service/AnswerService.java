@@ -17,46 +17,68 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
     private final SnowmanRepository snowmanRepository;
 
+    /**
+     * 타입 분석해 적합한 눈사람 반환
+     * @param submitAnswerRequest
+     * @return 결과 눈사람 반환
+     */
     public Snowman analysisType(SubmitAnswerRequest submitAnswerRequest) {
 
         // 응답 결과 계산
-        Map<String, Integer> type = calculateType(submitAnswerRequest);
+        Map<String, Integer> types = calculateType(submitAnswerRequest);
 
         // Type 만들기
-        String mbti = makeType(type);
-        System.out.println(mbti);
+        String type = makeType(types);
 
         // type에 맞는 snowman 조회
-        Snowman snowman = snowmanRepository.findByType(SnowmanType.valueOf(mbti));
+        Snowman snowman = snowmanRepository.findByType(SnowmanType.valueOf(type));
 
         return snowman;
     }
 
-    private String makeType(Map<String, Integer> type) {
-        String mbti = "";
-        mbti += type.get("E") > type.get("I") ? "E" : "I";
-        mbti += type.get("N") > type.get("S") ? "N" : "S";
-        mbti += type.get("F") > type.get("T") ? "F" : "T";
-        mbti += type.get("J") > type.get("P") ? "J" : "P";
+    /**
+     * 응답 결과로 type 만들기
+     * @param types
+     * @return type 결과 반환
+     */
+    private String makeType(Map<String, Integer> types) {
+        String type = "";
+        type += types.get("E") > types.get("I") ? "E" : "I";
+        type += types.get("N") > types.get("S") ? "N" : "S";
+        type += types.get("F") > types.get("T") ? "F" : "T";
+        type += types.get("J") > types.get("P") ? "J" : "P";
 
-        return mbti;
+        return type;
     }
 
+    /**
+     * 응답 결과 계산
+     * @param submitAnswerRequest
+     * @return 결과 계산한 Map
+     */
     private Map calculateType(SubmitAnswerRequest submitAnswerRequest) {
+        // 초기 Map
         Map<String, Integer> type = setType();
 
+        // 응답 결과 계산
         for (int i=0; i< submitAnswerRequest.getTotalQuestion(); i++) {
             Long questionId = submitAnswerRequest.getQuestions().get(i).getId();
             Long answerId = submitAnswerRequest.getQuestions().get(i).getAnswerId();
 
+            // answer의 AnswerType 조회
             Answer answer = answerRepository.findByIdAndQuestionId(answerId, questionId);
-            int count = type.containsKey(answer.getAnswerType()) ? type.get(answer.getAnswerType()) : 0;
-            type.put(answer.getAnswerType().name(), count + 1);
+
+            // type에 AnswerType 추가
+            type.put(answer.getAnswerType().name(), type.get(answer.getAnswerType().name()) + 1);
         }
 
         return type;
     }
 
+    /**
+     * 응답 결과 셀 Map 세팅
+     * @return 초기 Map
+     */
     private Map setType() {
         Map<String, Integer> type = new HashMap<>();
         type.put("E", 0);

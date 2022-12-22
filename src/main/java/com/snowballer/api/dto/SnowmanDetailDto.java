@@ -7,6 +7,8 @@ import lombok.Getter;
 @Builder @Getter
 public class SnowmanDetailDto {
 
+    private Long id;
+
     private String name;
 
     private String type;
@@ -15,6 +17,7 @@ public class SnowmanDetailDto {
 
     public static SnowmanDetailDto toResponse(TownSnowman townSnowman) {
         return SnowmanDetailDto.builder()
+            .id(townSnowman.getId())
             .name(townSnowman.getSnowman().getName())
             .type(townSnowman.getSnowman().getType().name())
             .description(townSnowman.getSnowman().getDescription())

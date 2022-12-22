@@ -28,6 +28,11 @@ public class TownSnowmanService {
     private final TownSnowmanRepository townSnowmanRepository;
     private final AnswerService answerService;
 
+    /**
+     * 눈사람 및 편지 조회
+     * @param id
+     * @return 눈사람 결과 조회
+     */
     @Transactional
     public TownSnowmanResponse getLetter(Long id) {
 
@@ -37,9 +42,6 @@ public class TownSnowmanService {
         TownSnowman townSnowman = townSnowmanRepository.findById(id)
             .orElseThrow(()  -> new RestApiException(ErrorCode.NOT_FOUNT_SNOWMAN));
 
-        // "haveLetter == True" 확인
-        townSnowman.checkHaveLetter();
-
         // 만약, seen == false일 시, true로 값 변경
         townSnowman.changeSeen();
         townSnowmanRepository.save(townSnowman);
@@ -48,6 +50,11 @@ public class TownSnowmanService {
         return TownSnowmanResponse.toResponse(townSnowman);
     }
 
+    /**
+     * 편지 등록
+     * @param url
+     * @param submitLetterRequest
+     */
     @Transactional
     public void setLetter(String url, SubmitLetterRequest submitLetterRequest) {
 
@@ -63,16 +70,22 @@ public class TownSnowmanService {
         townSnowmanRepository.save(townSnowman);
     }
 
+    /**
+     * 질문에 대한 답변으로 눈사람 만들기
+     * @param url
+     * @param submitAnswerRequest
+     * @return 답변 결과 반환
+     */
     @Transactional
     public ResultResponse makeSnowman(String url, SubmitAnswerRequest submitAnswerRequest) {
 
-        // url을 townId로 변환
+        // url로 town 조회
         Town town = townService.changeUrlToTown(url);
 
         // 응답으로 MBTI 결과 계산
         Snowman snowman = answerService.analysisType(submitAnswerRequest);
 
-        // town-snowman에 정보 저장 ( letter = Null, senderName = Null, seen = False, haveLetter = False )
+        // town-snowman에 정보 저장 ( letter = Null, seen = False )
         TownSnowman townSnowman = TownSnowman.buildSnowman(snowman, town, submitAnswerRequest.getSender());
         townSnowmanRepository.save(townSnowman);
 
@@ -83,9 +96,15 @@ public class TownSnowmanService {
         return ResultResponse.toResponse(town.getUser(), percent, townSnowman);
     }
 
+    /**
+     * percent 계산
+     * @param townId
+     * @param snowmanId
+     * @return percent
+     */
     private Integer calculatePercent(Long townId, Long snowmanId) {
-        Integer totalSize = townSnowmanRepository.countByTownIdAndHaveLetter(townId, true);
-        Integer typeSize = townSnowmanRepository.countByTownIdAndSnowmanIdAndHaveLetter(townId, snowmanId, true);
+        Integer totalSize = townSnowmanRepository.countByTownId(townId);
+        Integer typeSize = townSnowmanRepository.countByTownIdAndSnowmanId(townId, snowmanId);
 
         return (int) Math.round((double)(typeSize + 1) / (double)(totalSize + 1) * 100);
     }

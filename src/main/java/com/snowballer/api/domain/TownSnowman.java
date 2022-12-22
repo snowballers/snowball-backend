@@ -39,29 +39,32 @@ public class TownSnowman extends BaseTimeEntity {
     @JoinColumn(name = "town_id")
     private Town town;
 
-    public TownSnowman changeSeen() {
+    /**
+     * 열람했을 때, 열람했다고 표시하는 로직
+     */
+    public void changeSeen() {
         if (this.seen == false) {
             this.seen = true;
         }
-        return this;
     }
 
-    public void checkHaveLetter() {
-        if (this.haveLetter == false) {
-            throw new RuntimeException("Snowballers Error: 접근할 수 없는 눈사람입니다.");
-        }
-    }
-
+    /**
+     * Letter 작성
+     * - url의 town과 눈사람의 town 일치 확인
+     * - 이미 letter 존재 시 편지 등록 불가
+     * @param townId
+     * @param submitLetterRequest
+     */
     public void writeLetter(Long townId, SubmitLetterRequest submitLetterRequest) {
         if (town.getId() != townId) {
-            throw new RestApiException(ErrorCode.NOT_FOUNT_SNOWMAN);
+            throw new RestApiException(ErrorCode.INVALID_TOWN_LINK);
         }
 
-        if (haveLetter == true) {
-            throw new RuntimeException("Snowballers Error: 이미 작성한 편지가 있습니다.");
+        if (letter != null) {
+            throw new RestApiException(ErrorCode.ALREADY_EXIST_LETTER);
         }
+
         this.letter = submitLetterRequest.getLetter();
-        this.haveLetter = true;
     }
 
     public static TownSnowman buildSnowman(Snowman snowman, Town town, String sender) {

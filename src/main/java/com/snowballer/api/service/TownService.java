@@ -24,7 +24,7 @@ public class TownService {
     /**
      * 마을 정보 조회
      * @param url
-     * @return 마을 정보 조회 결과
+     * @return '마을 정보' 조회 결과
      */
     public TownResponse getTown(String url) {
 
@@ -41,6 +41,11 @@ public class TownService {
         return TownResponse.toResponse(town, townSnowmanList, isMine);
     }
 
+    /**
+     * url에 맞는 town 결과 조회
+     * @param url
+     * @return url이 나타내는 town 객체
+     */
     public Town changeUrlToTown(String url) {
         Long townId = urlService.decoding(url);
         Town town = townRepository.findById(townId)

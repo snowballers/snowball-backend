@@ -20,11 +20,11 @@ public class QuestionService {
     /**
      * 질문 조회하기
      * @param url
-     * @return 질문 조회 결과
+     * @return DB의 모든 '질문 및 응답' 조회 결과
      */
     public QuestionResponse getQuestion(String url) {
 
-        // url로 user 조회
+        // url로 town 조회
         Town town = townService.changeUrlToTown(url);
 
         // question 조회

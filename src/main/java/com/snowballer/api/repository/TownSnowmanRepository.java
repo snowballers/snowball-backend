@@ -8,7 +8,7 @@ public interface TownSnowmanRepository extends JpaRepository<TownSnowman, Long> 
 
     List<TownSnowman> findAllByTownId(Long townId);
 
-    Integer countByTownIdAndHaveLetter(Long townId, Boolean haveLetter);
+    Integer countByTownId(Long townId);
 
-    Integer countByTownIdAndSnowmanIdAndHaveLetter(Long townId, Long snowmanId, Boolean haveLetter);
+    Integer countByTownIdAndSnowmanId(Long townId, Long snowmanId);
 }
