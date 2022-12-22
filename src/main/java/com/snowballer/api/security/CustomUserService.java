@@ -33,13 +33,12 @@ public class CustomUserService extends DefaultOAuth2UserService {
 		String name = null;
 		if (provider.equals("google")) {
 			// TODO 구글 attribute 확인 !
-			socialLoginId = (String)userAttributes.get("id");
-			name = (String)userAttributes.get("login");
+			socialLoginId = (String) userAttributes.get("sub");
+			name = (String)userAttributes.get("name");
 		} else if (provider.equals("kakao")) {
-			Map<String, Object> kakaoAttributes = (Map<String, Object>)userAttributes.get("kakao_account");
-			socialLoginId = (String)kakaoAttributes.get("id");
+			socialLoginId = userAttributes.get("id").toString();
 			Map<String, Object> temp = null;
-			temp = (Map)kakaoAttributes.get("properties");
+			temp = (Map)userAttributes.get("properties");
 			name = (String)temp.get("nickname");
 		}
 
