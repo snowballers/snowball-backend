@@ -9,7 +9,9 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 	DEFAULT_ERROR_CODE("5000", HttpStatus.INTERNAL_SERVER_ERROR, "기본 에러 메시지입니다."),
-	UNAUTHORIZED_REQUEST("4000", HttpStatus.UNAUTHORIZED, "허용되지 않는 권한입니다.");
+	INVALID_TOWN_LINK("4000", HttpStatus.NOT_FOUND, "유효하지 않은 마을 링크입니다."),
+	NOT_FOUNT_SNOWMAN("4001", HttpStatus.NOT_FOUND, "찾을 수 없는 눈사람입니다."),
+	ALREADY_EXIST_LETTER("4002", HttpStatus.BAD_REQUEST, "해당 눈사람에는 이미 편지가 존재합니다.");
 
 	private final String code;
 	private final HttpStatus httpStatus;
