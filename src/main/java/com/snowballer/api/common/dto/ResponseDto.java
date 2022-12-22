@@ -12,7 +12,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-@Getter @AllArgsConstructor
+@AllArgsConstructor
+@Getter
 public class ResponseDto<T> {
 	private final Boolean success;
 	private final T data;
@@ -30,7 +31,7 @@ public class ResponseDto<T> {
 			.body(ResponseDto.builder()
 				.success(false)
 				.data(null)
-				.error(new ExceptionDto(e.getErrorCode())));
+				.error(new ExceptionDto(e.getErrorCode())).build());
 	}
 
 	// 그 외 Exception 에 따른 ExceptionDto 리턴
@@ -39,6 +40,6 @@ public class ResponseDto<T> {
 			.body(ResponseDto.builder()
 				.success(false)
 				.data(null)
-				.error(new ExceptionDto(ErrorCode.DEFAULT_ERROR_CODE)));
+				.error(new ExceptionDto(ErrorCode.DEFAULT_ERROR_CODE)).build());
 	}
 }
