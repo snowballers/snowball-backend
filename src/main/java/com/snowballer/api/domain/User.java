@@ -22,7 +22,7 @@ public class User extends BaseTimeEntity {
     private String nickname;
 
     @Column(name = "social_login_id")
-    private String socialLoginId;
+    private Long socialLoginId;
 
     @Column(name = "provider_type")
     @Enumerated(EnumType.STRING)
