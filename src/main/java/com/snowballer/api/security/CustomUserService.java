@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.snowballer.api.domain.User;
 import com.snowballer.api.repository.UserRepository;
+import com.snowballer.api.service.TownService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class CustomUserService extends DefaultOAuth2UserService {
 	private final UserRepository userRepository;
+	private final TownService townService;
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -53,7 +55,7 @@ public class CustomUserService extends DefaultOAuth2UserService {
 
 	private User createSocialUser(String socialLoginId, String name) {
 		User createUser = User.builder().nickname(name).socialLoginId(socialLoginId).build();
-		userRepository.save(createUser);
+		townService.createTown(userRepository.save(createUser));
 		return createUser;
 	}
 }

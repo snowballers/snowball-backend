@@ -58,9 +58,9 @@ public class UrlService {
 		}
 
 		return UriComponentsBuilder.fromUriString(
-				"https://www.snowtown.team/" +
-					encoding(townList.get(0).getId())
-					+ "/town"
+				"https://www.snowtown.team/"
+					+ "town/"
+					+ encoding(townList.get(0).getId())
 			)
 			.build().toUriString();
 	}
