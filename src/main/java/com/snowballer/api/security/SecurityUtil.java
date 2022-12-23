@@ -33,7 +33,7 @@ public class SecurityUtil {
     } else if (authentication.getPrincipal() instanceof String) {
       username = (String)authentication.getPrincipal();
     }
-    System.out.println(username);
+    System.out.println("username : " + username);
 
     return Optional.ofNullable(username);
   }
