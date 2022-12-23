@@ -59,7 +59,7 @@ public class UserService {
         Optional<String> id = SecurityUtil.getCurrentUsername();
 
         if (id.isPresent()) {
-            return userRepository.findByIdAndState(Long.valueOf(id.get()), UserState.ACTIVE));
+            return userRepository.findByIdAndState(Long.valueOf(id.get()), UserState.ACTIVE);
         }
         return Optional.empty();
     }
