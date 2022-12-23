@@ -51,7 +51,7 @@ jobs:
     - name: API Dockerfile 빌드 후 Docker Hub push
       run: |
         docker login -u ${{ secrets.DOCKER_DEV_USERNAME }} -p ${{ secrets.DOCKER_DEV_PASSWORD }}
-        docker build -t ${{ secrets.DOCKER_DEV_USERNAME }}/${{ secrets.DOCKER_DEV_IMAGE_NAME }} .
+        docker build --platform linux/amd64 -t ${{ secrets.DOCKER_DEV_USERNAME }}/${{ secrets.DOCKER_DEV_IMAGE_NAME }} .
         docker push ${{ secrets.DOCKER_DEV_USERNAME }}/${{ secrets.DOCKER_DEV_IMAGE_NAME }}
 
     - name: API 서버 docker-compose 실행 (SSH)
