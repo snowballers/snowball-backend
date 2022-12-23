@@ -44,7 +44,11 @@ public class UserService {
      * @return
      */
     public boolean checkSelfConfirmation(User user) {
-        if (getCurrentUser().get().equals(user)) {
+        Optional<User> currentUser = getCurrentUser();
+        if (currentUser.isEmpty()) {
+            return false;
+        }
+        if (currentUser.get().equals(user)) {
             return true;
         }
         return false;
