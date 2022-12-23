@@ -21,6 +21,9 @@ public class User extends BaseTimeEntity {
 
     private String nickname;
 
+    @Enumerated(EnumType.STRING)
+    private UserState state;
+
     @Column(name = "social_login_id")
     private String socialLoginId;
 
