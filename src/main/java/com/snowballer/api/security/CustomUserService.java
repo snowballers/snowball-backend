@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.snowballer.api.domain.LoginProviderType;
 import com.snowballer.api.domain.User;
+import com.snowballer.api.domain.UserState;
 import com.snowballer.api.repository.UserRepository;
 import com.snowballer.api.service.TownService;
 
@@ -44,7 +45,7 @@ public class CustomUserService extends DefaultOAuth2UserService {
 			name = (String)temp.get("nickname");
 		}
 
-		Optional<User> user = userRepository.findBySocialLoginId(socialLoginId);
+		Optional<User> user = userRepository.findBySocialLoginIdAndState(socialLoginId, UserState.ACTIVE);
 
 		 if (user.isEmpty()) {
 			 User createUser = createSocialUser(socialLoginId, name, provider);
