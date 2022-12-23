@@ -10,6 +10,7 @@ import com.snowballer.api.common.enums.ErrorCode;
 import com.snowballer.api.common.exception.RestApiException;
 import com.snowballer.api.domain.Town;
 import com.snowballer.api.domain.User;
+import com.snowballer.api.domain.UserState;
 import com.snowballer.api.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,7 @@ public class UrlService {
 	}
 
 	public String getTownUrl(Long userId) {
-		User user = userRepository.findById(userId)
+		User user = userRepository.findByIdAndState(userId, UserState.ACTIVE)
 			.orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUND_USER));
 
 		List<Town> townList = user.getTownList();

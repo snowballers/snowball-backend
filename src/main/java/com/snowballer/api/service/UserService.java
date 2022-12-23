@@ -3,6 +3,7 @@ package com.snowballer.api.service;
 import com.snowballer.api.common.enums.ErrorCode;
 import com.snowballer.api.common.exception.RestApiException;
 import com.snowballer.api.domain.User;
+import com.snowballer.api.domain.UserState;
 import com.snowballer.api.repository.UserRepository;
 import com.snowballer.api.security.SecurityUtil;
 import java.util.Optional;
@@ -44,11 +45,7 @@ public class UserService {
      * @return
      */
     public boolean checkSelfConfirmation(User user) {
-        Optional<User> currentUser = getCurrentUser();
-        if (currentUser.isEmpty()) {
-            return false;
-        }
-        if (currentUser.get().equals(user)) {
+        if (getCurrentUser().get().equals(user)) {
             return true;
         }
         return false;
@@ -62,7 +59,7 @@ public class UserService {
         Optional<String> id = SecurityUtil.getCurrentUsername();
 
         if (id.isPresent()) {
-            return userRepository.findById(Long.valueOf(id.get()));
+            return userRepository.findByIdAndState(Long.valueOf(id.get()), UserState.ACTIVE));
         }
         return Optional.empty();
     }
