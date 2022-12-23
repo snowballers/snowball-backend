@@ -52,7 +52,6 @@ public class UserService {
             return false;
         }
         if (currentUser.get().equals(user)) {
-            System.out.println("current owner : " + currentUser.get().getId());
             return true;
         }
         return false;
