@@ -46,7 +46,6 @@ public class UserService {
      */
     public boolean checkSelfConfirmation(User user) {
         Optional<User> currentUser = getCurrentUser();
-        System.out.println("town owner : " + user.getId());
 
         if (!currentUser.isPresent()) {
             return false;
