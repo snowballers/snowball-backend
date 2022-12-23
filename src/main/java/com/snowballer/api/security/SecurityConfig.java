@@ -9,6 +9,9 @@ import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationF
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
+import com.snowballer.api.repository.UserRepository;
+import com.snowballer.api.service.UrlService;
+
 import lombok.RequiredArgsConstructor;
 
 @EnableWebSecurity
@@ -16,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private final JwtTokenProvider jwtTokenProvider;
+	private final UrlService urlService;
 
 	@Bean
 	protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -36,7 +40,7 @@ public class SecurityConfig {
 					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and()
 					.oauth2Login()
-					.successHandler(new CustomLoginAuthHandler(jwtTokenProvider))
+					.successHandler(new CustomLoginAuthHandler(jwtTokenProvider, urlService))
 					.and()
 					.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
 							OAuth2LoginAuthenticationFilter.class);

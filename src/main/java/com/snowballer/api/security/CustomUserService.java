@@ -1,6 +1,7 @@
 package com.snowballer.api.security;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -10,13 +11,14 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import com.snowballer.api.domain.User;
+import com.snowballer.api.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
 public class CustomUserService extends DefaultOAuth2UserService {
-	// private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -26,13 +28,10 @@ public class CustomUserService extends DefaultOAuth2UserService {
 
 		String provider = userRequest.getClientRegistration().getRegistrationId();
 
-		String registrationId = userRequest.getClientRegistration().getRegistrationId();
-		String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
-			.getUserInfoEndpoint().getUserNameAttributeName();
 		String socialLoginId = null;
 		String name = null;
+		
 		if (provider.equals("google")) {
-			// TODO 구글 attribute 확인 !
 			socialLoginId = (String) userAttributes.get("sub");
 			name = (String)userAttributes.get("name");
 		} else if (provider.equals("kakao")) {
@@ -42,15 +41,19 @@ public class CustomUserService extends DefaultOAuth2UserService {
 			name = (String)temp.get("nickname");
 		}
 
-		// Optional<User> user = userRepository.findBySocialLoginId(socialLoginId);
-		//
-		// if (user.isEmpty()) {
-		// 	// TODO userService 회원가입 로직 작성
-		// 	User createUser = null;
-		// 	return CustomUserDetails.create(createUser, oAuth2User.getAttributes());
-		// }
-		//
-		User tempUser = null;
-		return CustomUserDetails.create(tempUser, oAuth2User.getAttributes());
+		Optional<User> user = userRepository.findBySocialLoginId(socialLoginId);
+
+		 if (user.isEmpty()) {
+			 User createUser = createSocialUser(socialLoginId, name);
+			 return CustomUserDetails.create(createUser, oAuth2User.getAttributes());
+		 }
+
+		return CustomUserDetails.create(user.get(), oAuth2User.getAttributes());
+	}
+
+	private User createSocialUser(String socialLoginId, String name) {
+		User createUser = User.builder().nickname(name).socialLoginId(socialLoginId).build();
+		userRepository.save(createUser);
+		return createUser;
 	}
 }

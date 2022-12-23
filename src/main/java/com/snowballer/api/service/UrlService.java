@@ -1,34 +1,67 @@
 package com.snowballer.api.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.snowballer.api.common.enums.ErrorCode;
+import com.snowballer.api.common.exception.RestApiException;
+import com.snowballer.api.domain.Town;
+import com.snowballer.api.domain.User;
+import com.snowballer.api.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UrlService {
 
-    static final char[] BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
+	private final UserRepository userRepository;
 
-    public String encoding(Long id) {
-        StringBuilder url = new StringBuilder();
-        Long value = id;
+	static final char[] BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
 
-        do {
-            url.append(BASE62[(int) (value % BASE62.length)]);
-            value /= BASE62.length;
-        } while(value > 0);
+	public String encoding(Long id) {
+		StringBuilder url = new StringBuilder();
+		Long value = id;
 
-        return url.toString();
-    }
+		do {
+			url.append(BASE62[(int)(value % BASE62.length)]);
+			value /= BASE62.length;
+		} while (value > 0);
 
-    public Long decoding(String url) {
-        Long id = 0L;
-        int power = 1;
+		return url.toString();
+	}
 
-        for (int i = 0; i < url.length(); i++) {
-            int digit = new String(BASE62).indexOf(url.charAt(i));
-            id += digit * power;
-            power *= BASE62.length;
-        }
+	public Long decoding(String url) {
+		Long id = 0L;
+		int power = 1;
 
-        return id;
-    }
+		for (int i = 0; i < url.length(); i++) {
+			int digit = new String(BASE62).indexOf(url.charAt(i));
+			id += digit * power;
+			power *= BASE62.length;
+		}
+
+		return id;
+	}
+
+	public String getTownUrl(Long userId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUND_USER));
+
+		List<Town> townList = user.getTownList();
+		if (townList.isEmpty()) {
+			throw new RestApiException(ErrorCode.NOT_FOUND_TOWN);
+		}
+
+		return UriComponentsBuilder.fromUriString(
+				"http://localhost:3000/" +
+					encoding(townList.get(0).getId())
+					+ "/town"
+			)
+			.build().toUriString();
+	}
 }
