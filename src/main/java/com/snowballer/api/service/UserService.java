@@ -59,6 +59,10 @@ public class UserService {
         Optional<String> id = SecurityUtil.getCurrentUsername();
 
         if (id.isPresent()) {
+            if (id.get().equals("anonymousUser")) {
+                return Optional.empty();
+            }
+
             return userRepository.findByIdAndState(Long.valueOf(id.get()), UserState.ACTIVE);
         }
         return Optional.empty();
