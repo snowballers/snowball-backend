@@ -58,7 +58,7 @@ public class UrlService {
 		}
 
 		return UriComponentsBuilder.fromUriString(
-				"http://localhost:3000/" +
+				"https://www.snowtown.team/" +
 					encoding(townList.get(0).getId())
 					+ "/town"
 			)
