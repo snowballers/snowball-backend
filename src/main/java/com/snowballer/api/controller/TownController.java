@@ -1,5 +1,14 @@
 package com.snowballer.api.controller;
 
+import com.snowballer.api.common.dto.ResponseDto;
+import com.snowballer.api.dto.response.QuestionResponse;
+import com.snowballer.api.dto.response.ResultResponse;
+import com.snowballer.api.dto.response.TownResponse;
+import com.snowballer.api.dto.response.TownSnowmanResponse;
+import com.snowballer.api.service.QuestionService;
+import com.snowballer.api.service.TownService;
+import com.snowballer.api.service.TownSnowmanService;
+import javax.validation.constraints.Null;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +24,9 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class TownController {
+	private final TownService townService;
+	private final TownSnowmanService townSnowmanService;
+	private final QuestionService questionService;
 
 	// TODO 회원가입/로그인 API
 
@@ -24,8 +36,8 @@ public class TownController {
 	 * @return 유저의 마을 정보
 	 */
 	@GetMapping("/{townUrl}/town")
-	public ResponseEntity<String> retrieveTown(@PathVariable String townUrl) {
-		return ResponseEntity.ok("town");
+	public ResponseDto<TownResponse> retrieveTown(@PathVariable String townUrl) {
+		return new ResponseDto(townService.getTown(townUrl));
 	}
 
 	/**
@@ -34,8 +46,8 @@ public class TownController {
 	 * @return 눈사람 상세 정보
 	 */
 	@GetMapping("/snowman/{snowmanId}")
-	public ResponseEntity<String> retrieveSnowman(@PathVariable Long snowmanId) {
-		return ResponseEntity.ok("snowman");
+	public ResponseDto<TownSnowmanResponse> retrieveSnowman(@PathVariable Long snowmanId) {
+		return new ResponseDto(townSnowmanService.getLetter(snowmanId));
 	}
 
 	/**
@@ -44,8 +56,8 @@ public class TownController {
 	 * @return 질문 List
 	 */
 	@GetMapping("/{townUrl}/question")
-	public ResponseEntity<String> retrieveQuestion(@PathVariable String townUrl) {
-		return ResponseEntity.ok("question");
+	public ResponseDto<QuestionResponse> retrieveQuestion(@PathVariable String townUrl) {
+		return new ResponseDto(questionService.getQuestion(townUrl));
 	}
 
 	/**
@@ -54,8 +66,8 @@ public class TownController {
 	 * @return 답변에 의해 만들어진 눈사람 정보
 	 */
 	@PostMapping("/{townUrl}/question")
-	public ResponseEntity<String> submitAnswer(@PathVariable String townUrl, @RequestBody SubmitAnswerRequest request) {
-		return ResponseEntity.ok("made-snowman");
+	public ResponseDto<ResultResponse> submitAnswer(@PathVariable String townUrl, @RequestBody SubmitAnswerRequest request) {
+		return new ResponseDto(townSnowmanService.makeSnowman(townUrl, request));
 	}
 
 	/**
@@ -64,7 +76,8 @@ public class TownController {
 	 * @return success
 	 */
 	@PostMapping("/{townUrl}/letter")
-	public ResponseEntity<String> submitLetter(@PathVariable String townUrl, @RequestBody SubmitLetterRequest request) {
-		return ResponseEntity.ok("letter success");
+	public ResponseDto<Null> submitLetter(@PathVariable String townUrl, @RequestBody SubmitLetterRequest request) {
+		townSnowmanService.setLetter(townUrl, request);
+		return new ResponseDto(null);
 	}
 }

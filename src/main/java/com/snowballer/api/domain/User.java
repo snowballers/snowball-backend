@@ -25,7 +25,7 @@ public class User extends BaseTimeEntity {
     private UserState state;
 
     @Column(name = "social_login_id")
-    private Long socialLoginId;
+    private String socialLoginId;
 
     @Column(name = "provider_type")
     @Enumerated(EnumType.STRING)
