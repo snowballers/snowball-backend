@@ -45,7 +45,11 @@ public class UserService {
      * @return
      */
     public boolean checkSelfConfirmation(User user) {
-        if (getCurrentUser().get().equals(user)) {
+        Optional<User> currentUser = getCurrentUser();
+        if (!currentUser.isPresent()) {
+            return false;
+        }
+        if (currentUser.get().equals(user)) {
             return true;
         }
         return false;
@@ -56,7 +60,15 @@ public class UserService {
      * @return
      */
     public Optional<User> getCurrentUser() {
-        return SecurityUtil.getCurrentUsername()
-          .flatMap(id -> userRepository.findByIdAndState(Long.valueOf(id), UserState.ACTIVE));
+        Optional<String> id = SecurityUtil.getCurrentUsername();
+
+        if (id.isPresent()) {
+            if (id.get().equals("anonymousUser")) {
+                return Optional.empty();
+            }
+
+            return userRepository.findByIdAndState(Long.valueOf(id.get()), UserState.ACTIVE);
+        }
+        return Optional.empty();
     }
 }
