@@ -59,7 +59,11 @@ public class UserService {
      * @return
      */
     public Optional<User> getCurrentUser() {
-        return SecurityUtil.getCurrentUsername()
-          .flatMap(id -> userRepository.findById(Long.valueOf(id)));
+        Optional<String> id = SecurityUtil.getCurrentUsername();
+
+        if (id.isPresent()) {
+            return userRepository.findById(Long.valueOf(id.get()));
+        }
+        return Optional.empty();
     }
 }
