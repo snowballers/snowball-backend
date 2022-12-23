@@ -31,6 +31,6 @@ public class QuestionService {
         List<Question> questionList = questionRepository.findAll();
 
         // dto로 반환
-        return QuestionResponse.toResponse(town.getUser(), questionList);
+        return QuestionResponse.toResponse(town, questionList);
     }
 }
