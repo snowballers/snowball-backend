@@ -33,4 +33,8 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user")
     List<Town> townList = new ArrayList<>();
+
+    public void changeStateOff() {
+        this.state = UserState.DELETED;
+    }
 }

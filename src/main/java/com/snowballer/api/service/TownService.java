@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TownService {
 
     private final UrlService urlService;
+    private final UserService userService;
     private final TownRepository townRepository;
     private final TownSnowmanRepository townSnowmanRepository;
 
@@ -34,14 +35,11 @@ public class TownService {
         // url로 town 조회
         Town town = changeUrlToTown(url);
 
-        // 본인 마을인지 권한 확인
-        boolean isMine = false;
-
         // 눈사람 조회
         List<TownSnowman> townSnowmanList = townSnowmanRepository.findAllByTownId(town.getId());
 
         // dto 생성 및 반환
-        return TownResponse.toResponse(town, townSnowmanList, isMine);
+        return TownResponse.toResponse(town, townSnowmanList, userService.checkSelfConfirmation(town.getUser()));
     }
 
     /**
@@ -76,10 +74,11 @@ public class TownService {
     @Transactional
     public void modifyTownName(String url, SubmitTownNameRequest submitTownNameRequest) {
 
-        // 권한 확인
-
         // url로 town 조회
         Town town = changeUrlToTown(url);
+
+        // 권한 확인 (본인 마을인지)
+        userService.checkAuthorized(town.getUser());
 
         // townName 수정
         town.modifyName(submitTownNameRequest.getTownName());
