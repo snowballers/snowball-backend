@@ -11,9 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Builder
+@Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +32,14 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user")
     List<Town> townList = new ArrayList<>();
+
+    @Builder
+    public User(String nickname, String socialLoginId, LoginProviderType providerType) {
+        this.nickname = nickname;
+        this.socialLoginId = socialLoginId;
+        this.providerType = providerType;
+        this.state = UserState.ACTIVE;
+    }
 
     public void changeStateOff() {
         this.state = UserState.DELETED;
