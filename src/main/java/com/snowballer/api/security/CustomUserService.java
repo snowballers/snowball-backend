@@ -10,7 +10,9 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import com.snowballer.api.domain.LoginProviderType;
 import com.snowballer.api.domain.User;
+import com.snowballer.api.domain.UserState;
 import com.snowballer.api.repository.UserRepository;
 import com.snowballer.api.service.TownService;
 
@@ -43,18 +45,22 @@ public class CustomUserService extends DefaultOAuth2UserService {
 			name = (String)temp.get("nickname");
 		}
 
-		Optional<User> user = userRepository.findBySocialLoginId(socialLoginId);
+		Optional<User> user = userRepository.findBySocialLoginIdAndState(socialLoginId, UserState.ACTIVE);
 
 		 if (user.isEmpty()) {
-			 User createUser = createSocialUser(socialLoginId, name);
+			 User createUser = createSocialUser(socialLoginId, name, provider);
 			 return CustomUserDetails.create(createUser, oAuth2User.getAttributes());
 		 }
 
 		return CustomUserDetails.create(user.get(), oAuth2User.getAttributes());
 	}
 
-	private User createSocialUser(String socialLoginId, String name) {
-		User createUser = User.builder().nickname(name).socialLoginId(socialLoginId).build();
+	private User createSocialUser(String socialLoginId, String name, String provider) {
+		User createUser = User.builder()
+			.nickname(name)
+			.socialLoginId(socialLoginId)
+			.providerType(LoginProviderType.valueOf(provider.toUpperCase()))
+			.build();
 		townService.createTown(userRepository.save(createUser));
 		return createUser;
 	}

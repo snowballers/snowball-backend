@@ -3,6 +3,7 @@ package com.snowballer.api.service;
 import com.snowballer.api.common.enums.ErrorCode;
 import com.snowballer.api.common.exception.RestApiException;
 import com.snowballer.api.domain.User;
+import com.snowballer.api.domain.UserState;
 import com.snowballer.api.repository.UserRepository;
 import com.snowballer.api.security.SecurityUtil;
 import java.util.Optional;
@@ -56,6 +57,6 @@ public class UserService {
      */
     public Optional<User> getCurrentUser() {
         return SecurityUtil.getCurrentUsername()
-          .flatMap(id -> userRepository.findById(Long.valueOf(id)));
+          .flatMap(id -> userRepository.findByIdAndState(Long.valueOf(id), UserState.ACTIVE));
     }
 }
