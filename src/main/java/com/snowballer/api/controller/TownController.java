@@ -9,6 +9,7 @@ import com.snowballer.api.dto.response.TownSnowmanResponse;
 import com.snowballer.api.service.QuestionService;
 import com.snowballer.api.service.TownService;
 import com.snowballer.api.service.TownSnowmanService;
+import com.snowballer.api.service.UserService;
 import javax.validation.constraints.Null;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +60,7 @@ public class TownController {
 	 */
 	@GetMapping("/{townUrl}/question")
 	public ResponseDto<QuestionResponse> retrieveQuestion(@PathVariable String townUrl) {
+		System.out.println("/townUrl/Get");
 		return new ResponseDto(questionService.getQuestion(townUrl));
 	}
 
@@ -69,6 +71,7 @@ public class TownController {
 	 */
 	@PostMapping("/{townUrl}/question")
 	public ResponseDto<ResultResponse> submitAnswer(@PathVariable String townUrl, @RequestBody SubmitAnswerRequest request) {
+		System.out.println("/townUrl/Post");
 		return new ResponseDto(townSnowmanService.makeSnowman(townUrl, request));
 	}
 
