@@ -18,7 +18,7 @@ public class QuestionAnswerDto {
 
     private List<AnswerDto> answers;
 
-    public static QuestionAnswerDto toResponse(Question question) {
+    public static QuestionAnswerDto toResponse(Question question, String name) {
 
         List<AnswerDto> answerDtoList = new ArrayList<AnswerDto>();
         for (Answer answer: question.getAnswerList()) {
@@ -27,9 +27,14 @@ public class QuestionAnswerDto {
 
         return QuestionAnswerDto.builder()
             .id(question.getId())
-            .content(question.getContent())
+            .content(changeToTownname(question.getContent(), name))
             .totalAnswers(question.getAnswerList().size())
             .answers(answerDtoList)
             .build();
+    }
+
+    private static String changeToTownname(String content, String name) {
+        content = content.replace("townName", name);
+        return content;
     }
 }
