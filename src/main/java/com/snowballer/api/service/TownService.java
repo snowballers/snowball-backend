@@ -50,7 +50,7 @@ public class TownService {
     public Town changeUrlToTown(String url) {
         Long townId = urlService.decoding(url);
         Town town = townRepository.findById(townId)
-            .orElseThrow(() -> new RestApiException(ErrorCode.INVALID_TOWN_LINK));
+            .orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUND_TOWN));
 
         return town;
     }
