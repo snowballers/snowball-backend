@@ -10,13 +10,16 @@ public class TownSnowmanResponse {
 
     private String senderName;
 
+    private Integer percent;
+
     private String letter;
 
     private SnowmanDetailDto snowman;
 
-    public static TownSnowmanResponse toResponse(TownSnowman townSnowman) {
+    public static TownSnowmanResponse toResponse(TownSnowman townSnowman, Integer percent) {
         return TownSnowmanResponse.builder()
             .senderName(townSnowman.getSenderName())
+            .percent(percent)
             .letter(townSnowman.getLetter())
             .snowman(SnowmanDetailDto.toResponse(townSnowman))
             .build();
