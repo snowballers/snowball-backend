@@ -62,7 +62,6 @@ public class UrlService {
 
 		return UriComponentsBuilder.fromUriString(
 				redirectUrlProperties.getUri()
-					+ encoding(townList.get(0).getId())
 			)
 			.build().toUriString();
 	}
