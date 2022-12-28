@@ -13,6 +13,7 @@ import com.snowballer.api.common.exception.RestApiException;
 import com.snowballer.api.domain.LoginProviderType;
 import com.snowballer.api.domain.User;
 import com.snowballer.api.domain.UserState;
+import com.snowballer.api.dto.request.LoginRequest;
 import com.snowballer.api.dto.response.LoginResponse;
 import com.snowballer.api.repository.UserRepository;
 import com.snowballer.api.security.JwtTokenProvider;
@@ -31,16 +32,16 @@ public class AuthService {
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@Transactional
-	public LoginResponse login(String provider, String code) {
+	public LoginResponse login(LoginRequest request) {
 
-		LoginProviderType providerType = LoginProviderType.valueOf(provider.toUpperCase());
+		LoginProviderType providerType = LoginProviderType.valueOf(request.getProvider().toUpperCase());
 		Map<String, Object> loginUserInfo = new HashMap<>();
 
 		String socialLoginId = null;
 		String name = null;
 
 		if (LoginProviderType.KAKAO.equals(providerType)) {
-			loginUserInfo = kakaoService.login(code);
+			loginUserInfo = kakaoService.login(request.getCode());
 		} else if (LoginProviderType.GOOGLE.equals(providerType)) {
 			// TODO GOOGLE
 		} else {
@@ -55,15 +56,13 @@ public class AuthService {
 		String townUrl = null;
 
 		if (user.isEmpty()) {
-			loginUser = createSocialUser(socialLoginId, name, provider);
+			loginUser = createSocialUser(socialLoginId, name, providerType);
 			townUrl = townService.createTown(userRepository.save(loginUser));
 		} else {
 			loginUser = user.get();
 		}
 
 		String token = jwtTokenProvider.createAccessToken(String.valueOf(loginUser.getId()));
-		System.out.println("jwt :" + token);
-		System.out.println("townUrl : " + townUrl);
 
 		return LoginResponse.builder()
 			.jwt(token)
@@ -71,11 +70,11 @@ public class AuthService {
 			.build();
 	}
 
-	private User createSocialUser(String socialLoginId, String name, String provider) {
+	private User createSocialUser(String socialLoginId, String name, LoginProviderType providerType) {
 		User createUser = User.builder()
 			.nickname(name)
 			.socialLoginId(socialLoginId)
-			.providerType(LoginProviderType.valueOf(provider.toUpperCase()))
+			.providerType(providerType)
 			.build();
 		return createUser;
 	}
