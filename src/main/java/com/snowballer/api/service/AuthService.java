@@ -34,6 +34,9 @@ public class AuthService {
 	@Transactional
 	public LoginResponse login(LoginRequest request) {
 
+		System.out.println(request.getCode());
+		System.out.println(request.getProvider());
+
 		LoginProviderType providerType = LoginProviderType.valueOf(request.getProvider().toUpperCase());
 		Map<String, Object> loginUserInfo = new HashMap<>();
 
