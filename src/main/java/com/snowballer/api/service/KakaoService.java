@@ -2,7 +2,9 @@ package com.snowballer.api.service;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -58,9 +60,11 @@ public class KakaoService {
 
 			String line = "";
 			String result = "";
+
 			while ((line = br.readLine()) != null) {
 				result += line;
 			}
+
 
 			JsonElement element = JsonParser.parseString(result);
 			accessToken = element.getAsJsonObject().get("access_token").getAsString();
@@ -84,7 +88,6 @@ public class KakaoService {
 			conn.setRequestProperty("Authorization", "Bearer " + accessToken);
 
 			int responseCode = conn.getResponseCode();
-			System.out.println("responseCode =" + responseCode);
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -94,7 +97,6 @@ public class KakaoService {
 			while ((line = br.readLine()) != null) {
 				result += line;
 			}
-			System.out.println("response body =" + result);
 
 			JsonElement element = JsonParser.parseString(result);
 
