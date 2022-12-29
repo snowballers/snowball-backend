@@ -47,7 +47,17 @@ public class JwtTokenProvider {
 			.signWith(SignatureAlgorithm.HS512, secretKey.getBytes())
 			.setSubject(userId)
 			.claim(AUTHORITIES_KEY, role)
-			.setIssuer("debrains")
+			.setIssuedAt(now)
+			.setExpiration(new Date(now.getTime() + tokenValidTime))
+			.compact();
+	}
+
+	public String createAccessToken(String payload) {
+		Date now = new Date();
+		Claims claims = Jwts.claims().setSubject(payload);
+		return Jwts.builder()
+			.signWith(SignatureAlgorithm.HS512, secretKey)
+			.setClaims(claims)
 			.setIssuedAt(now)
 			.setExpiration(new Date(now.getTime() + tokenValidTime))
 			.compact();
