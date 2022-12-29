@@ -53,7 +53,7 @@ public class TownSnowman extends BaseTimeEntity {
      * @param submitLetterRequest
      */
     public void writeLetter(Long townId, SubmitLetterRequest submitLetterRequest) {
-        if (town.getId() != townId) {
+        if (!this.town.getId().equals(townId)) {
             throw new RestApiException(ErrorCode.INVALID_TOWN_LINK);
         }
 

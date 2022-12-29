@@ -1,6 +1,17 @@
 package com.snowballer.api.controller;
 
+import javax.validation.constraints.Null;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.snowballer.api.common.dto.ResponseDto;
+import com.snowballer.api.dto.request.SubmitAnswerRequest;
+import com.snowballer.api.dto.request.SubmitLetterRequest;
 import com.snowballer.api.dto.request.SubmitTownNameRequest;
 import com.snowballer.api.dto.response.QuestionResponse;
 import com.snowballer.api.dto.response.ResultResponse;
@@ -9,17 +20,6 @@ import com.snowballer.api.dto.response.TownSnowmanResponse;
 import com.snowballer.api.service.QuestionService;
 import com.snowballer.api.service.TownService;
 import com.snowballer.api.service.TownSnowmanService;
-import javax.validation.constraints.Null;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.snowballer.api.dto.request.SubmitAnswerRequest;
-import com.snowballer.api.dto.request.SubmitLetterRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -59,6 +59,7 @@ public class TownController {
 	 */
 	@GetMapping("/{townUrl}/question")
 	public ResponseDto<QuestionResponse> retrieveQuestion(@PathVariable String townUrl) {
+		System.out.println("/townUrl/Get");
 		return new ResponseDto(questionService.getQuestion(townUrl));
 	}
 
@@ -69,6 +70,7 @@ public class TownController {
 	 */
 	@PostMapping("/{townUrl}/question")
 	public ResponseDto<ResultResponse> submitAnswer(@PathVariable String townUrl, @RequestBody SubmitAnswerRequest request) {
+		System.out.println("/townUrl/Post");
 		return new ResponseDto(townSnowmanService.makeSnowman(townUrl, request));
 	}
 

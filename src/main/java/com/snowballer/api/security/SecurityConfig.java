@@ -30,7 +30,7 @@ public class SecurityConfig {
 			http
 					.authorizeRequests(a -> a
 							.antMatchers("/", "/error", "/webjars/**","/submit","/basic/**","/create",
-									"/templates/**", "/**/town", "/**/question", "/**/letter").permitAll()
+									"/templates/**", "/**/town", "/**/question", "/**/letter", "/auth/**", "/snowman/**").permitAll()
 							.anyRequest().authenticated()
 					)
 					.exceptionHandling(e -> e
@@ -57,7 +57,9 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 
-		configuration.addAllowedOrigin("http://localhost:3000");
+		configuration.addAllowedOriginPattern("*");
+		configuration.addAllowedMethod("*");
+		configuration.addAllowedHeader("*");
 		// configuration.addAllowedHeader("*");
 		// configuration.addAllowedMethod("*");
 		configuration.setAllowCredentials(true);

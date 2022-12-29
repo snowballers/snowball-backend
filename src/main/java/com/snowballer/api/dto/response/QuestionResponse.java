@@ -11,8 +11,6 @@ import lombok.Getter;
 @Builder @Getter
 public class QuestionResponse {
 
-    private String name;
-
     private Integer totalQuestion;
 
     private List<QuestionAnswerDto> questions;
@@ -21,11 +19,10 @@ public class QuestionResponse {
 
         List<QuestionAnswerDto> questionAnswerDtoList = new ArrayList<QuestionAnswerDto>();
         for (Question question: questionList) {
-            questionAnswerDtoList.add(QuestionAnswerDto.toResponse(question));
+            questionAnswerDtoList.add(QuestionAnswerDto.toResponse(question, town.getName()));
         }
 
         return QuestionResponse.builder()
-            .name(town.getName())
             .totalQuestion(questionList.size())
             .questions(questionAnswerDtoList)
             .build();
