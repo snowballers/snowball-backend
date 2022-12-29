@@ -30,7 +30,7 @@ public class SecurityConfig {
 			http
 					.authorizeRequests(a -> a
 							.antMatchers("/", "/error", "/webjars/**","/submit","/basic/**","/create",
-									"/templates/**", "/**/town", "/**/question", "/**/letter", "/auth/**").permitAll()
+									"/templates/**", "/**/town", "/**/question", "/**/letter", "/auth/**", "/snowman/**").permitAll()
 							.anyRequest().authenticated()
 					)
 					.exceptionHandling(e -> e
