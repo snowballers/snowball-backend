@@ -42,6 +42,9 @@ public class TownSnowmanService {
         TownSnowman townSnowman = townSnowmanRepository.findById(id)
             .orElseThrow(()  -> new RestApiException(ErrorCode.NOT_FOUND_SNOWMAN));
 
+        // town의 user 유효성 체크
+        townSnowman.getTown().getUser().checkUserState();
+
         // 권한 확인 (본인 마을의 눈사람인지)
         userService.checkAuthorized(townSnowman.getTown().getUser());
 
@@ -67,6 +70,9 @@ public class TownSnowmanService {
         // townSnowman 조회
         TownSnowman townSnowman = townSnowmanRepository.findById(submitLetterRequest.getSnowmanId())
             .orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUND_SNOWMAN));
+
+        // town의 user 유효성 체크
+        townSnowman.getTown().getUser().checkUserState();
 
         // url을 townId로 변환
         Long townId = urlService.decoding(url);

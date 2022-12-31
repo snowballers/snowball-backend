@@ -1,6 +1,8 @@
 package com.snowballer.api.domain;
 
 import com.snowballer.api.common.domain.BaseTimeEntity;
+import com.snowballer.api.common.enums.ErrorCode;
+import com.snowballer.api.common.exception.RestApiException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,5 +45,11 @@ public class User extends BaseTimeEntity {
 
     public void changeStateOff() {
         this.state = UserState.DELETED;
+    }
+
+    public void checkUserState() {
+        if (this.state.equals(UserState.DELETED)) {
+            throw new RestApiException(ErrorCode.DELETED_USER_TOWN);
+        }
     }
 }

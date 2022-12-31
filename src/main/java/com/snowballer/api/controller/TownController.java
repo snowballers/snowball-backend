@@ -67,7 +67,6 @@ public class TownController {
 	 */
 	@GetMapping("/{townUrl}/question")
 	public ResponseDto<QuestionResponse> retrieveQuestion(@PathVariable String townUrl) {
-		System.out.println("/townUrl/Get");
 		return new ResponseDto(questionService.getQuestion(townUrl));
 	}
 
@@ -78,7 +77,6 @@ public class TownController {
 	 */
 	@PostMapping("/{townUrl}/question")
 	public ResponseDto<ResultResponse> submitAnswer(@PathVariable String townUrl, @RequestBody SubmitAnswerRequest request) {
-		System.out.println("/townUrl/Post");
 		return new ResponseDto(townSnowmanService.makeSnowman(townUrl, request));
 	}
 
