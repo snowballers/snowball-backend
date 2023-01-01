@@ -78,6 +78,11 @@ public class TownService {
         return urlService.encoding(town.getId());
     }
 
+    /**
+     * 마을 이름 수정
+     * @param url
+     * @param submitTownNameRequest
+     */
     @Transactional
     public void modifyTownName(String url, SubmitTownNameRequest submitTownNameRequest) {
 
