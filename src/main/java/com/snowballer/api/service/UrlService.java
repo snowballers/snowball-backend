@@ -26,6 +26,11 @@ public class UrlService {
 
 	static final char[] BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
 
+	/**
+	 * CHANGE townId TO url
+	 * @param id
+	 * @return url
+	 */
 	public String encoding(Long id) {
 		StringBuilder url = new StringBuilder();
 		Long value = id;
@@ -38,6 +43,11 @@ public class UrlService {
 		return url.toString();
 	}
 
+	/**
+	 * CHANGE url TO townId
+	 * @param url
+	 * @return townId
+	 */
 	public Long decoding(String url) {
 		Long id = 0L;
 		int power = 1;
