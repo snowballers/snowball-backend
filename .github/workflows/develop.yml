@@ -57,9 +57,9 @@ jobs:
     - name: API 서버 docker-compose 실행 (SSH)
       uses: appleboy/ssh-action@master
       with:
+        key: ${{ secrets.SERVER_KEY }}
         host: ${{ secrets.SERVER_HOST }}
-        username: snowball
-        password: ${{ secrets.SERVER_PASSWORD }}
+        username: ubuntu
         script: |
           docker login -u ${{ secrets.DOCKER_DEV_USERNAME }} -p ${{ secrets.DOCKER_DEV_PASSWORD }}
           docker-compose stop dev_api
