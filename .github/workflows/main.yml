@@ -57,9 +57,10 @@ jobs:
     - name: API 서버 docker-compose 실행 (SSH)
       uses: appleboy/ssh-action@master
       with:
-        key: ${{ secrets.SERVER_KEY }}
         host: ${{ secrets.SERVER_HOST }}
         username: ubuntu
+        key: ${{ secrets.SERVER_KEY }}
+        port: ${{ secrets.SERVER_PORT }}
         script: |
           docker login -u ${{ secrets.DOCKER_PROD_USERNAME }} -p ${{ secrets.DOCKER_PROD_PASSWORD }}
           docker-compose stop prod_api
