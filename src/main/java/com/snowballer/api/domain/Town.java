@@ -27,4 +27,8 @@ public class Town extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "town")
     private List<TownSnowman> townSnowmanList = new ArrayList<>();
+
+    public void modifyName(String newName) {
+        this.name = newName;
+    }
 }
