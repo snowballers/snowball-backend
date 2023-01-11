@@ -28,9 +28,6 @@ public class TownSnowman extends BaseTimeEntity {
     @Column(nullable = false)
     private Boolean seen;
 
-    @Column(name = "have_letter")
-    private Boolean haveLetter;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "snowman_id")
     private Snowman snowman;
@@ -56,7 +53,7 @@ public class TownSnowman extends BaseTimeEntity {
      * @param submitLetterRequest
      */
     public void writeLetter(Long townId, SubmitLetterRequest submitLetterRequest) {
-        if (town.getId() != townId) {
+        if (!this.town.getId().equals(townId)) {
             throw new RestApiException(ErrorCode.INVALID_TOWN_LINK);
         }
 

@@ -1,6 +1,8 @@
 package com.snowballer.api.domain;
 
 import com.snowballer.api.common.domain.BaseTimeEntity;
+import com.snowballer.api.common.enums.ErrorCode;
+import com.snowballer.api.common.exception.RestApiException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,4 +29,8 @@ public class Town extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "town")
     private List<TownSnowman> townSnowmanList = new ArrayList<>();
+
+    public void modifyName(String newName) {
+        this.name = newName;
+    }
 }

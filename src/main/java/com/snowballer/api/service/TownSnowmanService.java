@@ -6,6 +6,7 @@ import com.snowballer.api.domain.Snowman;
 import com.snowballer.api.domain.SnowmanType;
 import com.snowballer.api.domain.Town;
 import com.snowballer.api.domain.TownSnowman;
+import com.snowballer.api.domain.User;
 import com.snowballer.api.dto.request.SubmitAnswerRequest;
 import com.snowballer.api.dto.request.SubmitLetterRequest;
 import com.snowballer.api.dto.response.ResultResponse;
@@ -27,6 +28,7 @@ public class TownSnowmanService {
     private final TownService townService;
     private final TownSnowmanRepository townSnowmanRepository;
     private final AnswerService answerService;
+    private final UserService userService;
 
     /**
      * 눈사람 및 편지 조회
@@ -36,18 +38,25 @@ public class TownSnowmanService {
     @Transactional
     public TownSnowmanResponse getLetter(Long id) {
 
-        // 권한 확인 (본인 마을의 눈사람인지)
-
         // townSnowman에서 조회
         TownSnowman townSnowman = townSnowmanRepository.findById(id)
-            .orElseThrow(()  -> new RestApiException(ErrorCode.NOT_FOUNT_SNOWMAN));
+            .orElseThrow(()  -> new RestApiException(ErrorCode.NOT_FOUND_SNOWMAN));
+
+        // town의 user 유효성 체크
+        townSnowman.getTown().getUser().checkUserState();
+
+        // 권한 확인 (본인 마을의 눈사람인지)
+        userService.checkAuthorized(townSnowman.getTown().getUser());
 
         // 만약, seen == false일 시, true로 값 변경
         townSnowman.changeSeen();
         townSnowmanRepository.save(townSnowman);
 
+        // town_snowman에 같은 눈사람이 몇개인지 percent 계산
+        Integer percent = calculatePercent(townSnowman.getTown().getId(), townSnowman.getSnowman().getId(), 0);
+
         // dto 생성 및 반환
-        return TownSnowmanResponse.toResponse(townSnowman);
+        return TownSnowmanResponse.toResponse(townSnowman, percent);
     }
 
     /**
@@ -60,7 +69,10 @@ public class TownSnowmanService {
 
         // townSnowman 조회
         TownSnowman townSnowman = townSnowmanRepository.findById(submitLetterRequest.getSnowmanId())
-            .orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUNT_SNOWMAN));
+            .orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUND_SNOWMAN));
+
+        // town의 user 유효성 체크
+        townSnowman.getTown().getUser().checkUserState();
 
         // url을 townId로 변환
         Long townId = urlService.decoding(url);
@@ -90,7 +102,7 @@ public class TownSnowmanService {
         townSnowmanRepository.save(townSnowman);
 
         // town_snowman에 같은 눈사람이 몇개인지 percent 계산
-        Integer percent = calculatePercent(town.getId(), snowman.getId());
+        Integer percent = calculatePercent(town.getId(), snowman.getId(), 1);
 
         // dto 생성 및 반환
         return ResultResponse.toResponse(town.getUser(), percent, townSnowman);
@@ -102,10 +114,11 @@ public class TownSnowmanService {
      * @param snowmanId
      * @return percent
      */
-    private Integer calculatePercent(Long townId, Long snowmanId) {
+    private Integer calculatePercent(Long townId, Long snowmanId, Integer plus) {
+
         Integer totalSize = townSnowmanRepository.countByTownId(townId);
         Integer typeSize = townSnowmanRepository.countByTownIdAndSnowmanId(townId, snowmanId);
 
-        return (int) Math.round((double)(typeSize + 1) / (double)(totalSize + 1) * 100);
+        return (int) Math.round((double)(typeSize + plus) / (double)(totalSize + plus) * 100);
     }
 }
