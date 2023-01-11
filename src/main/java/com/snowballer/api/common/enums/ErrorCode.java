@@ -15,7 +15,8 @@ public enum ErrorCode {
 	NOT_FOUND_USER("4003", HttpStatus.NOT_FOUND, "찾을 수 없는 회원입니다."),
 	NOT_FOUND_TOWN("4004", HttpStatus.NOT_FOUND, "찾을 수 없는 마을입니다."),
 	UNAUTHORIZED("4005", HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
-	REQUIRED_LOGIN("4006", HttpStatus.BAD_REQUEST, "로그인이 필요합니다.");
+	REQUIRED_LOGIN("4006", HttpStatus.BAD_REQUEST, "로그인이 필요합니다."),
+	DELETED_USER_TOWN("4007", HttpStatus.BAD_REQUEST, "유효하지 않은 사용자 계정의 마을입니다.");
 
 	private final String code;
 	private final HttpStatus httpStatus;

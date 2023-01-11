@@ -48,9 +48,13 @@ public class TownService {
      * @return url이 나타내는 town 객체
      */
     public Town changeUrlToTown(String url) {
+        System.out.println("url : " + url);
         Long townId = urlService.decoding(url);
+        System.out.println("townId : " + townId);
         Town town = townRepository.findById(townId)
             .orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUND_TOWN));
+
+        town.getUser().checkUserState();
 
         return town;
     }
@@ -63,6 +67,9 @@ public class TownService {
     @Transactional
     public String createTown(User user) {
 
+        // user의 유효성 체크
+        user.checkUserState();
+
         Town town = townRepository.save(Town.builder()
             .name(user.getNickname())
             .user(user)
@@ -71,6 +78,11 @@ public class TownService {
         return urlService.encoding(town.getId());
     }
 
+    /**
+     * 마을 이름 수정
+     * @param url
+     * @param submitTownNameRequest
+     */
     @Transactional
     public void modifyTownName(String url, SubmitTownNameRequest submitTownNameRequest) {
 

@@ -1,7 +1,9 @@
 package com.snowballer.api.controller;
 
+import com.snowballer.api.service.UserService;
 import javax.validation.constraints.Null;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +31,14 @@ public class TownController {
 	private final TownService townService;
 	private final TownSnowmanService townSnowmanService;
 	private final QuestionService questionService;
+	private final UserService userService;
 
 	// TODO 회원가입/로그인 API
+	@DeleteMapping("/withdrawal")
+	public ResponseDto<Null> withdrawalUser() {
+		userService.withdrawal();
+		return new ResponseDto(null);
+	}
 
 	/**
 	 * 유저 개인 마을 정보 조회하기 API
@@ -59,7 +67,6 @@ public class TownController {
 	 */
 	@GetMapping("/{townUrl}/question")
 	public ResponseDto<QuestionResponse> retrieveQuestion(@PathVariable String townUrl) {
-		System.out.println("/townUrl/Get");
 		return new ResponseDto(questionService.getQuestion(townUrl));
 	}
 
@@ -70,7 +77,6 @@ public class TownController {
 	 */
 	@PostMapping("/{townUrl}/question")
 	public ResponseDto<ResultResponse> submitAnswer(@PathVariable String townUrl, @RequestBody SubmitAnswerRequest request) {
-		System.out.println("/townUrl/Post");
 		return new ResponseDto(townSnowmanService.makeSnowman(townUrl, request));
 	}
 
