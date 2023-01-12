@@ -10,6 +10,7 @@ application-dev.properties
 application-prod.properties
 docker-compose.yml
 .env
+TestController.java
 
 # User-specific stuff
 .idea/**/workspace.xml
