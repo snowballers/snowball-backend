@@ -29,7 +29,7 @@ public class JwtTokenProvider implements InitializingBean {
 	private final String secret;
 	private Key key;
 
-	private long tokenValidTime = 24 * 60 * 60 * 1000L;
+	private long tokenValidTime = 60 * 1000L;
 	private final String AUTHORITIES_KEY = "role";
 
 	public JwtTokenProvider(
