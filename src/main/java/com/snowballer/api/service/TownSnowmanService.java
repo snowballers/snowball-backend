@@ -53,7 +53,7 @@ public class TownSnowmanService {
         townSnowmanRepository.save(townSnowman);
 
         // town_snowman에 같은 눈사람이 몇개인지 percent 계산
-        Integer percent = calculatePercent(townSnowman.getTown().getId(), townSnowman.getSnowman().getId(), 0);
+        Integer percent = calculatePercent(townSnowman.getTown().getId(), townSnowman.getSnowman().getId());
 
         // dto 생성 및 반환
         return TownSnowmanResponse.toResponse(townSnowman, percent);
@@ -102,7 +102,7 @@ public class TownSnowmanService {
         townSnowmanRepository.save(townSnowman);
 
         // town_snowman에 같은 눈사람이 몇개인지 percent 계산
-        Integer percent = calculatePercent(town.getId(), snowman.getId(), 1);
+        Integer percent = calculatePercent(town.getId(), snowman.getId());
 
         // dto 생성 및 반환
         return ResultResponse.toResponse(town.getUser(), percent, townSnowman);
@@ -114,11 +114,11 @@ public class TownSnowmanService {
      * @param snowmanId
      * @return percent
      */
-    private Integer calculatePercent(Long townId, Long snowmanId, Integer plus) {
+    private Integer calculatePercent(Long townId, Long snowmanId) {
 
         Integer totalSize = townSnowmanRepository.countByTownId(townId);
         Integer typeSize = townSnowmanRepository.countByTownIdAndSnowmanId(townId, snowmanId);
 
-        return (int) Math.round((double)(typeSize + plus) / (double)(totalSize + plus) * 100);
+        return (int) Math.round((double)(typeSize) / (double)(totalSize) * 100);
     }
 }
